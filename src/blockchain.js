@@ -75,7 +75,7 @@ class Blockchain {
 
             block.hash = SHA256(JSON.stringify(block)).toString();
 
-            const errors = this.validateChain()
+            const errors = await this.validateChain()
 
             if (errors.length) {
                 return reject()
