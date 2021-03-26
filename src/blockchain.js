@@ -66,19 +66,25 @@ class Blockchain {
         return new Promise(async (resolve, reject) => {
             block.height = this.chain.length;
             block.time = new Date().getTime().toString().slice(0, -3)
-            block.hash = SHA256(JSON.stringify(block)).toString();
 
             if (this.height === -1) {
                 block.previousBlockHash = null;
-                resolve(block);
             } else {
                 block.previousBlockHash = this.chain[this.chain.length - 1].hash;
-                resolve(block);
             }
+
+            block.hash = SHA256(JSON.stringify(block)).toString();
+
+            const errors = this.validateChain()
+
+            if (errors.length) {
+                return reject()
+            }
+
+            resolve(block);
 
             this.chain.push(block);
             this.height = this.chain.length;
-            this.validateChain()
         });
     }
 
@@ -119,7 +125,7 @@ class Blockchain {
             const timeDif = currentTime - messageTime;
 
             if (timeDif < (5 * 60)) {
-                const isVerified = true
+                const isVerified = bitcoinMessage.verify(message, address, signature);
 
                 if (isVerified) {
                     const block = new BlockClass.Block({ owner: address, star: star });
@@ -212,7 +218,7 @@ class Blockchain {
                     lastBlockHash = this.chain[i - 1].hash;
                 }
 
-                if (validatedBlock !== true) {
+                if (!validatedBlock) {
                     errorLog.push(validatedBlock);
                 } else if (block.previousBlockHash != lastBlockHash) {
                     errorLog.push("Previouse hash missmatch");

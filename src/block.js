@@ -67,6 +67,8 @@ class Block {
         if (decodedBody && this.height > 0) {
             return decodedBody;
         }
+
+        return false
     }
 
 }
