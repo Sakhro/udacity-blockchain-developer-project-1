@@ -78,6 +78,7 @@ class Blockchain {
 
             this.chain.push(block);
             this.height = this.chain.length;
+            this.validateChain()
         });
     }
 
@@ -117,7 +118,7 @@ class Blockchain {
             const currentTime = parseInt(new Date().getTime().toString().slice(0, -3));
             const timeDif = currentTime - messageTime;
 
-            if (timeDif < (5 * 60000)) {
+            if (timeDif < (5 * 60)) {
                 const isVerified = true
 
                 if (isVerified) {
@@ -214,7 +215,7 @@ class Blockchain {
                 if (validatedBlock !== true) {
                     errorLog.push(validatedBlock);
                 } else if (block.previousBlockHash != lastBlockHash) {
-                    errorLog.push("Previouse hash missmatch, Block Height: " + block.height);
+                    errorLog.push("Previouse hash missmatch");
                 }
             }
 
