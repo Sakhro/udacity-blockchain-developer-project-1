@@ -28,11 +28,6 @@ class Blockchain {
         this.initializeChain();
     }
 
-    /**
-     * This method will check for the height of the chain and if there isn't a Genesis Block it will create it.
-     * You should use the `addBlock(block)` to create the Genesis Block
-     * Passing as a data `{data: 'Genesis Block'}`
-     */
     async initializeChain() {
         if (this.height === -1) {
             let block = new BlockClass.Block({ data: 'Genesis Block' });
